@@ -129,7 +129,7 @@ public class TaxRateDetailController
 			List<TaxRateDetail> listEx = new ArrayList<TaxRateDetail>();
 			if(type.equals("A"))
 			{
-				List<TaxRateDetail> list = taxRateDetailService.findAllSortKey();
+				List<TaxRateDetail> list = taxRateDetailService.findAll();
 				for(int i=0;i<listEx.size();i++)
 				{
 					TaxRateDetail en = (TaxRateDetail)listEx.get(i);
@@ -177,7 +177,8 @@ public class TaxRateDetailController
 	{
 		System.out.println("searchTaxRateDetailGet");
 
-		List<TaxRateDetail> list = taxRateDetailService.findAllSortKey();
+//		List<TaxRateDetail> list = taxRateDetailService.findAllSortKey();
+		List<TaxRateDetail> list = taxRateDetailService.findAll();
 		return new ResponseEntity<List<TaxRateDetail>>(list,HttpStatus.OK);
 	}
 	
