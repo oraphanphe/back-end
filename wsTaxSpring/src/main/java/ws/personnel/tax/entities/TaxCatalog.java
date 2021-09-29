@@ -34,25 +34,25 @@ public class TaxCatalog {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@Column(name = "tax_catalog_id", unique = true, nullable = false, length = 2)
-    private String tax_catalog_id;
+    private String taxCatalogId;
     
     @Column(name = "name", length = 90)
     private String name;
     
     @Column(name = "name_th", length = 90)
-    private String name_th;
+    private String nameTh;
     
     @Column(name = "name_en", length = 90)
-    private String name_en;
+    private String nameEn;
     
     @Column(name = "description", length = 200)
     private String description;
     
     @Column(name = "description_th", length = 200)
-    private String description_th;
+    private String descriptionTh;
     
     @Column(name = "description_en", length = 200)
-    private String description_en;
+    private String descriptionEn;
     
 //    @Enumerated(EnumType.STRING)
 //    @Column(name = "status")
@@ -62,53 +62,52 @@ public class TaxCatalog {
     private String status;
     
     @Column(name = "effective_date")
-    private Date effective_date;
+    private Date effectiveDate;
     
     @Column(name = "create_user", length = 10)
-    private String create_user;
+    private String createUser;
 
     @CreationTimestamp
 	@Column(name = "create_time")
-	private Timestamp create_time;
+	private Timestamp createTime;
     
     @Column(name = "update_user", length = 10)
-    private String update_user;
+    private String updateUser;
     
     @UpdateTimestamp
 	@Column(name = "update_time")
-	private Timestamp update_time;
+	private Timestamp updateTime;
     
     public TaxCatalog(){}
+
     
-    public TaxCatalog(String tax_catalog_id, String name, String name_th, String name_en, String description,
-			String description_th, String description_en, String status, Date effective_date, String create_user,
-			Timestamp create_time, String update_user, Timestamp update_time) {
-//	public TaxCatalog(String tax_catalog_id, String name, String name_th, String name_en, String description,
-//			String description_th, String description_en, enu_status status, Date effective_date, String create_user,
-//			Timestamp create_time, String update_user, Timestamp update_time) {
-		super();
-		this.tax_catalog_id = tax_catalog_id;
+    
+	public TaxCatalog(String taxCatalogId, String name, String nameTh, String nameEn, String description,
+			String descriptionTh, String descriptionEn, String status, Date effectiveDate, String createUser,
+			Timestamp createTime, String updateUser, Timestamp updateTime) {
+		this.taxCatalogId = taxCatalogId;
 		this.name = name;
-		this.name_th = name_th;
-		this.name_en = name_en;
+		this.nameTh = nameTh;
+		this.nameEn = nameEn;
 		this.description = description;
-		this.description_th = description_th;
-		this.description_en = description_en;
-		this.status = status; 
-		System.out.println("TaxCatalog.TaxCatalog() status = "+status);
-		this.effective_date = effective_date;
-		this.create_user = create_user;
-		this.create_time = create_time;
-		this.update_user = update_user;
-		this.update_time = update_time;
+		this.descriptionTh = descriptionTh;
+		this.descriptionEn = descriptionEn;
+		this.status = status;
+		this.effectiveDate = effectiveDate;
+		this.createUser = createUser;
+		this.createTime = createTime;
+		this.updateUser = updateUser;
+		this.updateTime = updateTime;
 	}
 
-	public String getTax_catalog_id() {
-		return tax_catalog_id;
+
+
+	public String getTaxCatalogId() {
+		return taxCatalogId;
 	}
 
-	public void setTax_catalog_id(String tax_catalog_id) {
-		this.tax_catalog_id = tax_catalog_id;
+	public void setTaxCatalogId(String taxCatalogId) {
+		this.taxCatalogId = taxCatalogId;
 	}
 
 	public String getName() {
@@ -119,20 +118,20 @@ public class TaxCatalog {
 		this.name = name;
 	}
 
-	public String getName_th() {
-		return name_th;
+	public String getNameTh() {
+		return nameTh;
 	}
 
-	public void setName_th(String name_th) {
-		this.name_th = name_th;
+	public void setNameTh(String nameTh) {
+		this.nameTh = nameTh;
 	}
 
-	public String getName_en() {
-		return name_en;
+	public String getNameEn() {
+		return nameEn;
 	}
 
-	public void setName_en(String name_en) {
-		this.name_en = name_en;
+	public void setNameEn(String nameEn) {
+		this.nameEn = nameEn;
 	}
 
 	public String getDescription() {
@@ -143,81 +142,71 @@ public class TaxCatalog {
 		this.description = description;
 	}
 
-	public String getDescription_th() {
-		return description_th;
+	public String getDescriptionTh() {
+		return descriptionTh;
 	}
 
-	public void setDescription_th(String description_th) {
-		this.description_th = description_th;
+	public void setDescriptionTh(String descriptionTh) {
+		this.descriptionTh = descriptionTh;
 	}
 
-	public String getDescription_en() {
-		return description_en;
+	public String getDescriptionEn() {
+		return descriptionEn;
 	}
 
-	public void setDescription_en(String description_en) {
-		this.description_en = description_en;
+	public void setDescriptionEn(String descriptionEn) {
+		this.descriptionEn = descriptionEn;
 	}
 
-//	public enu_status getStatus() {
-//		System.out.println("TaxCatalog.getStatus() status = "+status);
-//		return status;
-//	}
-//
-//	public void setStatus(enu_status status) {
-//		System.out.println("TaxCatalog.setStatus() status = "+status);
-//		this.status = status;
-//	}
-	
 	public String getStatus() {
-		System.out.println("TaxCatalog.getStatus() status = "+status);
 		return status;
 	}
 
 	public void setStatus(String status) {
-		System.out.println("TaxCatalog.setStatus() status = "+status);
 		this.status = status;
 	}
-	
-	public Date getEffective_date() {
-		return effective_date;
+
+	public Date getEffectiveDate() {
+		return effectiveDate;
 	}
 
-	public void setEffective_date(Date effective_date) {
-		this.effective_date = effective_date;
+	public void setEffectiveDate(Date effectiveDate) {
+		this.effectiveDate = effectiveDate;
 	}
 
-	public String getCreate_user() {
-		return create_user;
+	public String getCreateUser() {
+		return createUser;
 	}
 
-	public void setCreate_user(String create_user) {
-		this.create_user = create_user;
+	public void setCreateUser(String createUser) {
+		this.createUser = createUser;
 	}
 
-	public Timestamp getCreate_time() {
-		return create_time;
+	public Timestamp getCreateTime() {
+		return createTime;
 	}
 
-	public void setCreate_time(Timestamp create_time) {
-		this.create_time = create_time;
+	public void setCreateTime(Timestamp createTime) {
+		this.createTime = createTime;
 	}
 
-	public String getUpdate_user() {
-		return update_user;
+	public String getUpdateUser() {
+		return updateUser;
 	}
 
-	public void setUpdate_user(String update_user) {
-		this.update_user = update_user;
+	public void setUpdateUser(String updateUser) {
+		this.updateUser = updateUser;
 	}
 
-	public Timestamp getUpdate_time() {
-		return update_time;
+	public Timestamp getUpdateTime() {
+		return updateTime;
 	}
 
-	public void setUpdate_time(Timestamp update_time) {
-		this.update_time = update_time;
+	public void setUpdateTime(Timestamp updateTime) {
+		this.updateTime = updateTime;
 	}
+    
+    
     
     
 }

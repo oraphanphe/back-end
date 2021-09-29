@@ -5,11 +5,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import ws.personnel.tax.entities.TaxCatalog;
 import ws.personnel.tax.entities.TaxRateDetail;
+import ws.personnel.tax.entities.TaxRateDetailGroup;
 import ws.personnel.tax.service.TaxRateDetailService;
 
 @RestController
@@ -39,12 +39,10 @@ public class TaxRateDetailController
 	@RequestMapping(value = "/taxRateDetail/add", method=RequestMethod.POST)
 	public ResponseEntity<TaxRateDetail> addTaxRateDetail(@RequestBody TaxRateDetail taxRateDetail) 
 	{
-		System.out.println("TaxRateDetailController.addTaxRateDetail() taxRateDetail = "+taxRateDetail.toString());
-		System.out.println("TaxRateDetailController.addTaxRateDetail() taxRateDetail getNo "+taxRateDetail.getTax_rate_id());
-		System.out.println("TaxRateDetailController.addTaxRateDetail() taxRateDetail getCreate_user_code "+taxRateDetail.getCreate_user());
-		System.out.println("TaxRateDetailController.addTaxRateDetail() taxRateDetail getMin"+taxRateDetail.getMin_amt());
-		System.out.println("TaxRateDetailController.addTaxRateDetail() taxRateDetail getCreate_time "+taxRateDetail.getCreate_time());
-		System.out.println("TaxRateDetailController.addTaxRateDetail() taxRateDetail getCreate_time "+taxRateDetail.getUpdate_time());
+		System.out.println("TaxRateDetailController.addTaxRateDetail() taxRateDetail getCreateUser "+taxRateDetail.getCreateUser());
+		System.out.println("TaxRateDetailController.addTaxRateDetail() taxRateDetail getMinAmt"+taxRateDetail.getMinAmt());
+		System.out.println("TaxRateDetailController.addTaxRateDetail() taxRateDetail getCreateTime "+taxRateDetail.getCreateTime());
+		System.out.println("TaxRateDetailController.addTaxRateDetail() taxRateDetail getUpdateTime "+taxRateDetail.getUpdateTime());
 		TaxRateDetail rateDetail = null;
 		try
 		{
@@ -63,19 +61,24 @@ public class TaxRateDetailController
 	{
 		try
 		{
-			Optional<TaxRateDetail> old = taxRateDetailService.findById(taxRateDetail.getTax_rate_id());
-			
+			System.out.println("TaxRateDetailController.updateTaxrate() taxRateDetail = "+taxRateDetail);
+			TaxRateDetailGroup taxRateDetailGroup = taxRateDetail.getTaxRateDetailGroup();
+			System.out.println("TaxRateDetailController.updateTaxrate() taxRateDetailGroup.getTaxRateId() = "+taxRateDetailGroup.getTaxRateId());
+			System.out.println("TaxRateDetailController.updateTaxrate() taxRateDetailGroup.getRateNo() = "+taxRateDetailGroup.getRateNo());
+			Optional<TaxRateDetail> old = taxRateDetailService.findById(taxRateDetailGroup.getTaxRateId(), taxRateDetailGroup.getRateNo());
+			System.out.println("TaxRateDetailController.updateTaxrate() old "+old);
+			System.out.println("TaxRateDetailController.updateTaxrate() old.isPresent() "+old.isPresent());
 			if (old.isPresent()) 
 			{
-				taxRateDetail.setCreate_time(old.get().getCreate_time());
-				taxRateDetail.setCreate_user(old.get().getCreate_user());
+				taxRateDetail.setCreateTime(old.get().getCreateTime());
+				taxRateDetail.setCreateUser(old.get().getCreateUser());
 				TaxRateDetail taxRateDetailLast = taxRateDetailService.save(taxRateDetail);
 				return new ResponseEntity<TaxRateDetail>(taxRateDetail,HttpStatus.OK);
 			}
 			else
 			{
-				System.out.printf("No found with no :"+ taxRateDetail.getTax_rate_id());
-				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ไม่พบ no: "+taxRateDetail.getTax_rate_id()+" ที่ใช้ในการอัพเดต!");
+				System.out.printf("No found with TaxRateId :"+ taxRateDetailGroup.getTaxRateId()+" and RateNo "+taxRateDetailGroup.getRateNo());
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ไม่พบ  TaxRateId: "+taxRateDetailGroup.getTaxRateId()+" and RateNo "+taxRateDetailGroup.getRateNo()+" ที่ใช้ในการอัพเดต!");
 			}
 		}
 		catch(Exception e)
@@ -83,86 +86,60 @@ public class TaxRateDetailController
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
-
-//http://localhost:8061/tax/taxRateDetail/delete/1
-	@RequestMapping(value = "/taxRateDetail/delete/{id}", method=RequestMethod.DELETE)
-	public ResponseEntity<String> deleteTaxRateDetail(@PathVariable("id") String id)
+	
+	//URL - http://localhost:8061/tax/taxRateDetail/delete?tax_rate_id=1&rate_no=2
+	@RequestMapping(value = "/taxRateDetail/delete", method=RequestMethod.DELETE)
+	public ResponseEntity<String> deleteHistoryTaxrate(@RequestParam("tax_rate_id") String taxRateId,
+			@RequestParam("rate_no") String rateNo)
 	{
 		
+		System.out.println("HistoryTaxrateController.deleteHistoryTaxrate() taxRateId "+taxRateId);
+		System.out.println("HistoryTaxrateController.deleteHistoryTaxrate() rateNo  "+rateNo);
 		try
 		{
-//			Optional<Taxrate> ex = taxrateService.findById(id);
-//			if (ex.isPresent()) 
-//			{
-//				List<Taxrate> listEx = new ArrayList<Taxrate>();
-//				listEx.add(ex.get());
-//				for(int i=0;i<listEx.size();i++)
-//				{
-//					Taxrate en = (Taxrate)listEx.get(i);
-//					System.out.println("result searchTaxrate : "+en);
-//					taxrateService.delete(id);
-//				}
-//				return new ResponseEntity<>("success",HttpStatus.OK);
-//		    } 
-//			else 
-//			{
-//				
-//		        System.out.printf("No no found with id :"+ id);
-//		        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ไม่พบ  no :"+id);
-//		    }
-			System.out.println("deleteTaxRateDetail========"+id);
-			taxRateDetailService.delete(id);
+			System.out.println("HistoryTaxrateController.deleteHistoryTaxrate() tax_rtaxRateIdate_id = "+taxRateId+" : rateNo = "+rateNo);
+			taxRateDetailService.delete(taxRateId, rateNo);
 			return new ResponseEntity<>("success",HttpStatus.OK);
 			
 		}
 		catch(Exception e)
 		{
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ไม่สามารถลบข้อมูล no :"+id+" ได้");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ไม่สามารถลบข้อมูล  taxRateId = "+taxRateId+" : rateNo = "+rateNo+" ได้");
 		}
 	}
-	@RequestMapping(value = "/taxRateDetail/search", method=RequestMethod.POST)///taxrate/search?type=A
-	public ResponseEntity<List<TaxRateDetail>> searchTaxRateDetail(@RequestParam("type") String type) 
+
+
+	
+	@RequestMapping(value = "/taxRateDetail/searchByKey", method=RequestMethod.POST)///taxRateDetail/searchByKey?tax_rate_id=1&rate_no=2
+	public ResponseEntity<List<TaxRateDetail>> searchTaxRateDetailByKey(@RequestParam("tax_rate_id") String taxRateId,
+			@RequestParam("rate_no") String rateNo)
 	{
-		System.out.println("searchTaxRateDetail type = "+type);
+		System.out.println("searchTaxRateDetail taxRateId = "+taxRateId);
+		System.out.println("searchTaxRateDetail rateNo = "+rateNo);
 		try
 		{
-			List<TaxRateDetail> listEx = new ArrayList<TaxRateDetail>();
-			if(type.equals("A"))
-			{
-				List<TaxRateDetail> list = taxRateDetailService.findAll();
-				for(int i=0;i<listEx.size();i++)
+			List<TaxRateDetail> list = new ArrayList<TaxRateDetail>();
+			
+				Optional<TaxRateDetail> his = taxRateDetailService.findById(taxRateId, rateNo);
+				System.out.println("TaxRateDetailController.searchTaxRateDetail() his "+his);
+				System.out.println("TaxRateDetailController.searchTaxRateDetail() his "+his.toString());
+				if (his.isPresent()) 
 				{
-					TaxRateDetail en = (TaxRateDetail)listEx.get(i);
-					System.out.println("result searchTaxRateDetail getNo : "+en.getRate_no());
-					System.out.println("result searchTaxRateDetail getMin : "+en.getMin_amt());
-					System.out.println("result searchTaxRateDetail : "+en.toString());
-				}
-				System.out.println("TaxRateDetailController.searchTaxRateDetail() list "+list);
-				System.out.println("TaxRateDetailController.searchTaxRateDetail() list "+list.toString());
-				return new ResponseEntity<List<TaxRateDetail>>(list,HttpStatus.OK);
-			}
-			else
-			{
-				Optional<TaxRateDetail> ex = taxRateDetailService.findById(type);
-				System.out.println("TaxRateDetailController.searchTaxRateDetail() ex "+ex);
-				System.out.println("TaxRateDetailController.searchTaxRateDetail() ex "+ex.toString());
-				if (ex.isPresent()) 
-				{
-					listEx.add(ex.get());
-					for(int i=0;i<listEx.size();i++)
+					list.add(his.get());
+					for(int i=0;i<list.size();i++)
 					{
-						TaxRateDetail en = (TaxRateDetail)listEx.get(i);
+						TaxRateDetail en = (TaxRateDetail)list.get(i);
 						System.out.println("result searchTaxRateDetail : "+en);
 					}
-					return new ResponseEntity<List<TaxRateDetail>>(listEx,HttpStatus.OK);
+					return new ResponseEntity<List<TaxRateDetail>>(list,HttpStatus.OK);
 			    } 
 				else 
 				{
 					
-			        System.out.printf("No no found with id :"+ type);
-			        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ไม่พบ  no :"+type);
+			        System.out.printf("no found with  taxRateId = "+taxRateId+" : rateNo = "+rateNo);
+			        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ไม่พบ  taxRateId = "+taxRateId+" : rateNo = "+rateNo);
 			    }
-			}
+			
 		}
 		catch(Exception e)
 		{
@@ -170,6 +147,39 @@ public class TaxRateDetailController
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage());
 		}
 	}
+	
+	@RequestMapping(value = "/taxRateDetail/search", method=RequestMethod.POST)///taxRateDetail/search?type=1
+	public ResponseEntity<List<TaxRateDetail>> searchTaxRateDetail(@RequestParam("type") String type)
+	{
+		System.out.println("searchTaxRateDetail type = "+type);
+		try
+		{
+			List<TaxRateDetail> list = new ArrayList<TaxRateDetail>();
+			if(type.equals("A"))
+			    list = taxRateDetailService.findAll();
+			else
+			    list = taxRateDetailService.findByTaxRateId(type);
+			if(list.size()>0){
+				for(int i=0;i<list.size();i++)
+				{
+					TaxRateDetail en = (TaxRateDetail)list.get(i);
+					System.out.println("result searchTaxRateDetail : "+en);
+				}
+				return new ResponseEntity<List<TaxRateDetail>>(list,HttpStatus.OK);
+			} 
+			else 
+			{
+			    System.out.printf("no found with  taxRateId = "+type);
+			    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ไม่พบ  taxRateId = "+type);
+			}			
+		}
+		catch(Exception e)
+		{
+			System.out.println("Error searchTaxRateDetail : "+e.getMessage());
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage());
+		}
+	}
+	
 	
 //	http://localhost:8061/tax/taxRateDetail/searchGET
 	@RequestMapping(value = "/taxRateDetail/searchGET", method=RequestMethod.GET)

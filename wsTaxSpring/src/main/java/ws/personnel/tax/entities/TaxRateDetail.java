@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -17,22 +18,14 @@ import javax.persistence.GenerationType;
 @Table(name = "tax_rate_detail")
 public class TaxRateDetail 
 {
-	private static final long serialVersionUID = 1L;
-	@Id
-	@Column(name = "tax_rate_id", unique = true, nullable = false, length = 2)
-    private String tax_rate_id ;
-	
-//	@Id
-//	@Column(name = "rate_no", unique = true, nullable = false, length = 2)
-//    private String rate_no ;
-	 @Column(name = "rate_no", length = 2)
-	    private String rate_no;
+	@EmbeddedId
+	private TaxRateDetailGroup taxRateDetailGroup;
 	
     @Column(name = "min_amt", precision=10, scale=2)
-    private BigDecimal min_amt;
+    private BigDecimal minAmt;
     
     @Column(name = "max_amt", precision=10, scale=2)
-    private BigDecimal max_amt;
+    private BigDecimal maxAmt;
     
     @Column(name = "rate", precision=5, scale=2)
     private BigDecimal rate;
@@ -41,76 +34,66 @@ public class TaxRateDetail
     private BigDecimal amount;
     
     @Column(name = "tax_amt", precision=10, scale=2)
-    private BigDecimal tax_amt;
+    private BigDecimal taxAmt;
     
     @Column(name = "tax_sum", precision=10, scale=2)
-    private BigDecimal tax_sum;
+    private BigDecimal taxSum;
     
     @Column(name = "create_user", length = 10)
-    private String create_user;
+    private String createUser;
     
     @CreationTimestamp
 	@Column(name = "create_time")
-	private Timestamp create_time;
+	private Timestamp createTime;
     
     @Column(name = "update_user", length = 10)
-    private String update_user;
+    private String updateUser;
     
     @UpdateTimestamp
 	@Column(name = "update_time")
-	private Timestamp update_time;
+	private Timestamp updateTime;
 
 	public TaxRateDetail() {
 	}
 
-	public TaxRateDetail(String tax_rate_id, String rate_no, BigDecimal min_amt, BigDecimal max_amt, BigDecimal rate,
-			BigDecimal amount, BigDecimal tax_amt, BigDecimal tax_sum, String create_user, Timestamp create_time,
-			String update_user, Timestamp update_time) {
-		super();
-		this.tax_rate_id = tax_rate_id;
-		this.rate_no = rate_no;
-		this.min_amt = min_amt;
-		this.max_amt = max_amt;
+	public TaxRateDetail(TaxRateDetailGroup taxRateDetailGroup, BigDecimal minAmt, BigDecimal maxAmt, BigDecimal rate,
+			BigDecimal amount, BigDecimal taxAmt, BigDecimal taxSum, String createUser, Timestamp createTime,
+			String updateUser, Timestamp updateTime) {
+		this.taxRateDetailGroup = taxRateDetailGroup;
+		this.minAmt = minAmt;
+		this.maxAmt = maxAmt;
 		this.rate = rate;
 		this.amount = amount;
-		this.tax_amt = tax_amt;
-		this.tax_sum = tax_sum;
-		this.create_user = create_user;
-		this.create_time = create_time;
-		this.update_user = update_user;
-		this.update_time = update_time;
+		this.taxAmt = taxAmt;
+		this.taxSum = taxSum;
+		this.createUser = createUser;
+		this.createTime = createTime;
+		this.updateUser = updateUser;
+		this.updateTime = updateTime;
 	}
 
-	public String getTax_rate_id() {
-		return tax_rate_id;
+	public TaxRateDetailGroup getTaxRateDetailGroup() {
+		return taxRateDetailGroup;
 	}
 
-	public void setTax_rate_id(String tax_rate_id) {
-		this.tax_rate_id = tax_rate_id;
+	public void setTaxRateDetailGroup(TaxRateDetailGroup taxRateDetailGroup) {
+		this.taxRateDetailGroup = taxRateDetailGroup;
 	}
 
-	public String getRate_no() {
-		return rate_no;
+	public BigDecimal getMinAmt() {
+		return minAmt;
 	}
 
-	public void setRate_no(String rate_no) {
-		this.rate_no = rate_no;
+	public void setMinAmt(BigDecimal minAmt) {
+		this.minAmt = minAmt;
 	}
 
-	public BigDecimal getMin_amt() {
-		return min_amt;
+	public BigDecimal getMaxAmt() {
+		return maxAmt;
 	}
 
-	public void setMin_amt(BigDecimal min_amt) {
-		this.min_amt = min_amt;
-	}
-
-	public BigDecimal getMax_amt() {
-		return max_amt;
-	}
-
-	public void setMax_amt(BigDecimal max_amt) {
-		this.max_amt = max_amt;
+	public void setMaxAmt(BigDecimal maxAmt) {
+		this.maxAmt = maxAmt;
 	}
 
 	public BigDecimal getRate() {
@@ -129,53 +112,55 @@ public class TaxRateDetail
 		this.amount = amount;
 	}
 
-	public BigDecimal getTax_amt() {
-		return tax_amt;
+	public BigDecimal getTaxAmt() {
+		return taxAmt;
 	}
 
-	public void setTax_amt(BigDecimal tax_amt) {
-		this.tax_amt = tax_amt;
+	public void setTaxAmt(BigDecimal taxAmt) {
+		this.taxAmt = taxAmt;
 	}
 
-	public BigDecimal getTax_sum() {
-		return tax_sum;
+	public BigDecimal getTaxSum() {
+		return taxSum;
 	}
 
-	public void setTax_sum(BigDecimal tax_sum) {
-		this.tax_sum = tax_sum;
+	public void setTaxSum(BigDecimal taxSum) {
+		this.taxSum = taxSum;
 	}
 
-	public String getCreate_user() {
-		return create_user;
+	public String getCreateUser() {
+		return createUser;
 	}
 
-	public void setCreate_user(String create_user) {
-		this.create_user = create_user;
+	public void setCreateUser(String createUser) {
+		this.createUser = createUser;
 	}
 
-	public Timestamp getCreate_time() {
-		return create_time;
+	public Timestamp getCreateTime() {
+		return createTime;
 	}
 
-	public void setCreate_time(Timestamp create_time) {
-		this.create_time = create_time;
+	public void setCreateTime(Timestamp createTime) {
+		this.createTime = createTime;
 	}
 
-	public String getUpdate_user() {
-		return update_user;
+	public String getUpdateUser() {
+		return updateUser;
 	}
 
-	public void setUpdate_user(String update_user) {
-		this.update_user = update_user;
+	public void setUpdateUser(String updateUser) {
+		this.updateUser = updateUser;
 	}
 
-	public Timestamp getUpdate_time() {
-		return update_time;
+	public Timestamp getUpdateTime() {
+		return updateTime;
 	}
 
-	public void setUpdate_time(Timestamp update_time) {
-		this.update_time = update_time;
+	public void setUpdateTime(Timestamp updateTime) {
+		this.updateTime = updateTime;
 	}
+
+	
     
     
 }

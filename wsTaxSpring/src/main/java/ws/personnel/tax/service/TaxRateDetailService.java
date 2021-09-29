@@ -1,12 +1,10 @@
 package ws.personnel.tax.service;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import ws.personnel.tax.entities.TaxRateDetail;
+import ws.personnel.tax.entities.TaxRateDetailGroup;
 import ws.personnel.tax.repository.TaxRateDetailRepository;
 
 @Service
@@ -18,32 +16,34 @@ public class TaxRateDetailService {
 	{
 		return  taxRateDetailRepository.findAll();
 	}
-	public List<TaxRateDetail> findAllSortKey()
+	public Optional<TaxRateDetail> findById(String taxRateId, String rateNo) 
 	{
-		return  taxRateDetailRepository.findAll(Sort.by(Sort.Direction.ASC, "no"));
+		TaxRateDetailGroup taxRateDetailGroup = new TaxRateDetailGroup(taxRateId, rateNo);
+		return taxRateDetailRepository.findById(taxRateDetailGroup);
 	}
-
-	public Optional<TaxRateDetail> findById(String id) 
+	
+	public List<TaxRateDetail> findByTaxRateId(String taxRateId) 
 	{
-		return taxRateDetailRepository.findById(id);
+		return taxRateDetailRepository.findByTaxRateId(taxRateId);
 	}
-
+	
 	public TaxRateDetail save(TaxRateDetail taxRateDetail)
 	{
-		System.out.println("TaxRateDetaileService.save() ratetax getNo "+taxRateDetail.getTax_rate_id());
+		System.out.println("TaxRateDetailService.save() taxRateDetail getTaxRateId "+taxRateDetail.getTaxRateDetailGroup().getTaxRateId());
+		System.out.println("TaxRateDetailService.save() taxRateDetail getRateNo "+taxRateDetail.getTaxRateDetailGroup().getRateNo());
+		System.out.println("TaxRateDetailService.save() taxRateDetail getMinAmt "+taxRateDetail.getMinAmt());
 		return  taxRateDetailRepository.save(taxRateDetail);
 	}
-	public String delete(String id) 
+	public String delete(String taxRateId, String rateNo) 
 	{
-		System.out.println("TaxRateDetailService.delete() id "+id);
-		taxRateDetailRepository.deleteById(id);
-		return "no with ID :"+id+" is deleted"; 
+		TaxRateDetailGroup taxRateDetailGroup = new TaxRateDetailGroup(taxRateId, rateNo);
+		taxRateDetailRepository.deleteById(taxRateDetailGroup);
+		return "no with taxRateId :"+taxRateId+" and rateNo :"+rateNo+" is deleted"; 
 	}
 	public String delete(TaxRateDetail taxRateDetail) 
 	{
-		System.out.println("TaxRateDetailService.delete() ratetax.getNo()  "+taxRateDetail.getTax_rate_id());
 		taxRateDetailRepository.delete(taxRateDetail);
-		return "no with ID :"+taxRateDetail.getTax_rate_id()+" is deleted"; 
+		return "no with taxRateId :"+taxRateDetail.getTaxRateDetailGroup().getTaxRateId()+" and rateNo :"+taxRateDetail.getTaxRateDetailGroup().getRateNo()+" is deleted"; 
 	}
 	public String deleteAll() 
 	{

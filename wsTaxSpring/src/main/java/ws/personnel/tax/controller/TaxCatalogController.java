@@ -57,19 +57,19 @@ public class TaxCatalogController {
 		{
 			try
 			{
-				Optional<TaxCatalog> old = taxCatalogService.findById(taxCatalog.getTax_catalog_id());
+				Optional<TaxCatalog> old = taxCatalogService.findById(taxCatalog.getTaxCatalogId());
 				
 				if (old.isPresent()) 
 				{
-					taxCatalog.setCreate_time(old.get().getCreate_time());
-					taxCatalog.setCreate_user(old.get().getCreate_user());
+					taxCatalog.setCreateTime(old.get().getCreateTime());
+					taxCatalog.setCreateUser(old.get().getCreateUser());
 					TaxCatalog taxCatalogLast = taxCatalogService.save(taxCatalog);
 					return new ResponseEntity<TaxCatalog>(taxCatalogLast,HttpStatus.OK);
 				}
 				else
 				{
-					System.out.printf("No found with Tax_catalog_id :"+ taxCatalog.getTax_catalog_id());
-					throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ไม่พบ Tax_catalog_id: "+taxCatalog.getTax_catalog_id()+" ที่ใช้ในการอัพเดต!");
+					System.out.printf("No found with TaxCatalogId :"+ taxCatalog.getTaxCatalogId());
+					throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ไม่พบ TaxCatalogId: "+taxCatalog.getTaxCatalogId()+" ที่ใช้ในการอัพเดต!");
 				}
 			}
 			catch(Exception e)

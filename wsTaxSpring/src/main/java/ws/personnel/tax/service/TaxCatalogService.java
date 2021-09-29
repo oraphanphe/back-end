@@ -30,21 +30,21 @@ public class TaxCatalogService {
 
 	public TaxCatalog save(TaxCatalog taxCatalog)
 	{
-		System.out.println("TaxCatalogService.save() ratetax getNo "+taxCatalog.getTax_catalog_id());
+		System.out.println("TaxCatalogService.save() ratetax getNo "+taxCatalog.getTaxCatalogId());
 		System.out.println("TaxCatalogService.save() ratetax getStatus "+taxCatalog.getStatus());
 		return  taxCatalogRepository.save(taxCatalog);
 	}
-	public String delete(String tax_catalog_id) 
+	public String delete(String taxCatalogId) 
 	{
-		System.out.println("TaxCatalogService.delete() tax_catalog_id "+tax_catalog_id);
-		taxCatalogRepository.deleteById(tax_catalog_id);
-		return "no with tax_catalog_id :"+tax_catalog_id+" is deleted"; 
+		System.out.println("TaxCatalogService.delete() tax_catalog_id "+taxCatalogId);
+		taxCatalogRepository.deleteById(taxCatalogId);
+		return "no with taxCatalogId :"+taxCatalogId+" is deleted"; 
 	}
 	public String delete(TaxCatalog taxCatalog) 
 	{
-		System.out.println("TaxCatalogService.delete() taxCatalog.getTax_catalog_id()  "+taxCatalog.getTax_catalog_id());
+		System.out.println("TaxCatalogService.delete() taxCatalog.getTaxCatalogId()  "+taxCatalog.getTaxCatalogId());
 		taxCatalogRepository.delete(taxCatalog);
-		return "tax_catalog_id :"+taxCatalog.getTax_catalog_id()+" is deleted"; 
+		return "taxCatalogId :"+taxCatalog.getTaxCatalogId()+" is deleted"; 
 	}
 	public String deleteAll() 
 	{
