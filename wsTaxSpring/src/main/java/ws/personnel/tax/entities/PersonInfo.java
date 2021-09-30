@@ -8,7 +8,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import ws.personnel.tax.util.Status;
 /*
 CREATE TABLE public.tax_catalog
 (
@@ -73,8 +76,10 @@ public class PersonInfo {
     @Column(name = "phone", length = 10)
     private String phone;
     
-    @Column(name = "status")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "enu_status")
+    @Type( type = "pgsql_enum" )
+    private Status status;
     	   
     @Column(name = "create_user", length = 10)
     private String createUser;
@@ -96,7 +101,7 @@ public class PersonInfo {
     
 	public PersonInfo(int personId, Date effectiveDate, String citizenId, String taxId, String socId, String preName,
 			String firstName, String lastName, String address, String tambon, String zipcode, String email, String phone,
-			String status, String createUser, Timestamp createTime, String updateUser, Timestamp updateTime) {
+			Status status, String createUser, Timestamp createTime, String updateUser, Timestamp updateTime) {
 		this.personId = personId;
 		this.effectiveDate = effectiveDate;
 		this.citizenId = citizenId;
@@ -221,11 +226,11 @@ public class PersonInfo {
 		this.phone = phone;
 	}
 
-	public String getStatus() {
+	public Status getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(Status status) {
 		this.status = status;
 	}
 
