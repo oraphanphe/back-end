@@ -8,7 +8,11 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.UpdateTimestamp;
+import ws.personnel.tax.util.PostgreSQLEnumType;
+import ws.personnel.tax.util.Status;
 /*
 CREATE TABLE public.tax_catalog
 (
@@ -30,6 +34,10 @@ CREATE TABLE public.tax_catalog
 */
 @Entity
 @Table(name = "tax_catalog")
+@TypeDef(
+	    name = "pgsql_enum",
+	    typeClass = PostgreSQLEnumType.class
+	)
 public class TaxCatalog {
 	private static final long serialVersionUID = 1L;
 	@Id
@@ -58,8 +66,10 @@ public class TaxCatalog {
 //    @Column(name = "status")
 //    private enu_status status;
     
-    @Column(name = "status")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "enu_status")
+    @Type( type = "pgsql_enum" )
+    private Status status;
     
     @Column(name = "effective_date")
     private Date effectiveDate;
@@ -83,7 +93,7 @@ public class TaxCatalog {
     
     
 	public TaxCatalog(String taxCatalogId, String name, String nameTh, String nameEn, String description,
-			String descriptionTh, String descriptionEn, String status, Date effectiveDate, String createUser,
+			String descriptionTh, String descriptionEn, Status status, Date effectiveDate, String createUser,
 			Timestamp createTime, String updateUser, Timestamp updateTime) {
 		this.taxCatalogId = taxCatalogId;
 		this.name = name;
@@ -158,11 +168,11 @@ public class TaxCatalog {
 		this.descriptionEn = descriptionEn;
 	}
 
-	public String getStatus() {
+	public Status getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(Status status) {
 		this.status = status;
 	}
 
@@ -204,9 +214,5 @@ public class TaxCatalog {
 
 	public void setUpdateTime(Timestamp updateTime) {
 		this.updateTime = updateTime;
-	}
-    
-    
-    
-    
+	}   
 }

@@ -3,12 +3,22 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.UpdateTimestamp;
+import ws.personnel.tax.util.PostgreSQLEnumType;
+import ws.personnel.tax.util.Status;
 @Entity
 @Table(name = "tax_person_info")
+@TypeDef(
+	    name = "pgsql_enum",
+	    typeClass = PostgreSQLEnumType.class
+	)
 public class TaxPersonInfo {
 
 	private static final long serialVersionUID = 1L;
@@ -31,12 +41,10 @@ public class TaxPersonInfo {
     @Column(name = "receive_cer", length = 10)
     private String receiveCer;
     
-//    @Enumerated(EnumType.STRING)
-//    @Column(name = "status")
-//    private enu_status status;
-    
-    @Column(name = "status")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "enu_status")
+    @Type( type = "pgsql_enum" )
+    private Status status;
     
     @Column(name = "create_user", length = 10)
     private String createUser;
@@ -55,7 +63,7 @@ public class TaxPersonInfo {
     public TaxPersonInfo(){}
     
 	public TaxPersonInfo(String salseId, String employeeType, String incomeCatalogId, String rdRequest, Date rdDate,
-			String receiveCer, String status, String createUser, Timestamp createTime, String updateUser,
+			String receiveCer, Status status, String createUser, Timestamp createTime, String updateUser,
 			Timestamp updateTime) {
 		this.salseId = salseId;
 		this.employeeType = employeeType;
@@ -118,11 +126,11 @@ public class TaxPersonInfo {
 		this.receiveCer = receiveCer;
 	}
 
-	public String getStatus() {
+	public Status getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(Status status) {
 		this.status = status;
 	}
 

@@ -1,17 +1,24 @@
 package ws.personnel.tax.entities;
-
 import java.sql.Timestamp;
-
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
-
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.UpdateTimestamp;
+import ws.personnel.tax.util.PostgreSQLEnumType;
+import ws.personnel.tax.util.Status;
 
 @Entity
 @Table(name = "person_info_hist")
+@TypeDef(
+	    name = "pgsql_enum",
+	    typeClass = PostgreSQLEnumType.class
+	)
 public class PersonInfoHist {
 	@EmbeddedId
 	private PersonInfoHistGroup personInfoHistGroup;
@@ -49,8 +56,10 @@ public class PersonInfoHist {
 	    @Column(name = "phone", length = 10)
 	    private String phone;
 	    
-	    @Column(name = "status")
-	    private String status;
+	    @Enumerated(EnumType.STRING)
+	    @Column(columnDefinition = "enu_status")
+	    @Type( type = "pgsql_enum" )
+	    private Status status;
 	    	   
 	    @Column(name = "create_user", length = 10)
 	    private String createUser;
@@ -70,7 +79,7 @@ public class PersonInfoHist {
 
 		public PersonInfoHist(PersonInfoHistGroup personInfoHistGroup, String citizenId, String taxId, String socId,
 				String preName, String firstName, String lastName, String address, String tambon, String zipcode,
-				String email, String phone, String status, String createUser, Timestamp createTime, String updateUser,
+				String email, String phone, Status status, String createUser, Timestamp createTime, String updateUser,
 				Timestamp updateTime) {
 			this.personInfoHistGroup = personInfoHistGroup;
 			this.citizenId = citizenId;
@@ -187,11 +196,11 @@ public class PersonInfoHist {
 			this.phone = phone;
 		}
 
-		public String getStatus() {
+		public Status getStatus() {
 			return status;
 		}
 
-		public void setStatus(String status) {
+		public void setStatus(Status status) {
 			this.status = status;
 		}
 
