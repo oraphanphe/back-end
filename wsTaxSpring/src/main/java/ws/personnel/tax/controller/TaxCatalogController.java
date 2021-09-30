@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import ws.personnel.tax.entities.TaxCatalog;
-import ws.personnel.tax.entities.enu_status;
 import ws.personnel.tax.service.TaxCatalogService;
 
 @RestController
