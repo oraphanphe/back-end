@@ -1,10 +1,15 @@
 package ws.personnel.tax.service;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import ws.personnel.tax.entities.object.TaxCatalogObj;
+import ws.personnel.tax.entities.objectC.TaxCatalogObjC;
 
 import ws.personnel.tax.entities.TaxCatalog;
 import ws.personnel.tax.repository.TaxCatalogRepository;
@@ -13,6 +18,24 @@ import ws.personnel.tax.repository.TaxCatalogRepository;
 public class TaxCatalogService {
 	@Autowired
 	private TaxCatalogRepository taxCatalogRepository;
+	
+	@Autowired
+	public TaxCatalogService(TaxCatalogRepository taxCatalogRepository) {
+		this.taxCatalogRepository = taxCatalogRepository;
+	}
+
+	public TaxCatalogObjC searchDataAll() {
+		ModelMapper modelMapper = new ModelMapper();
+		TaxCatalogObjC taxCatalogObjC = new TaxCatalogObjC();
+		List<TaxCatalogObj> listTaxCatalogObj = new ArrayList<>();
+		List<TaxCatalog> listTaxCatalogEntity = taxCatalogRepository.searchDataAll();
+		for (int i = 0; i < listTaxCatalogEntity.size(); i++) {
+			TaxCatalogObj taxCatalogObj = modelMapper.map(listTaxCatalogEntity.get(i), TaxCatalogObj.class);
+			listTaxCatalogObj.add(taxCatalogObj);
+		}
+		taxCatalogObjC.setListTaxCatalogObj(listTaxCatalogObj);
+		return taxCatalogObjC;
+	}
 
 	public List<TaxCatalog> findAll()
 	{
